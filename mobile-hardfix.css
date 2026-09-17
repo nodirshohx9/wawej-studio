@@ -1,0 +1,89 @@
+/* Wawej Studio — hard mobile layout fix */
+@media (max-width: 820px){
+  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:clip!important}
+  body{position:relative!important}
+  *,*::before,*::after{box-sizing:border-box}
+  body>*,main,header,footer,section,.nav-wrap{max-width:100%!important;min-width:0!important}
+  main{width:100%!important;overflow-x:clip!important}
+
+  /* Use real side gutters instead of calc() widths on phones/tablets. */
+  .shell{width:auto!important;max-width:none!important;margin-left:14px!important;margin-right:14px!important}
+  .nav.shell{width:auto!important;max-width:none!important}
+
+  .nav{min-width:0!important;gap:10px!important}
+  .brand{display:block!important;min-width:0!important;flex:0 1 126px!important;overflow:visible!important}
+  .brand img{display:block!important;width:126px!important;max-width:100%!important;height:auto!important;object-fit:contain!important}
+  .nav-actions{flex:0 0 auto!important;min-width:0!important}
+  .nav-links{max-width:calc(100vw - 28px)!important}
+
+  .hero,.section,.contact{width:auto!important;max-width:none!important;min-width:0!important;overflow-x:clip!important}
+  .hero-stage,.project,.project-copy,.project-visual,.service-grid,.timeline,.about-panel,.contact-box,.footer{width:100%!important;max-width:100%!important;min-width:0!important}
+  .hero-stage,.project,.project-visual,.about-panel,.contact-box{overflow:hidden!important}
+
+  .hero-title,.hero-sub,.section-head,.section-head>*,.section-head h2,.section-head p,.project-copy h3,.project-copy p,.about-panel h2,.about-panel p,.contact-box h2,.contact-box p{max-width:100%!important;min-width:0!important;overflow-wrap:anywhere!important;word-break:normal!important}
+  .hero-actions{width:100%!important;max-width:100%!important}
+  .hero-actions>*{max-width:100%!important;min-width:0!important}
+
+  .project{grid-template-columns:minmax(0,1fr)!important}
+  .project-copy{box-sizing:border-box!important}
+  .project-visual{box-sizing:border-box!important}
+  .math-brand-card{max-width:calc(100% - 28px)!important}
+  .phone-card{max-width:calc(100% - 44px)!important}
+  .bubble{max-width:46%!important;white-space:normal!important;text-align:center!important}
+
+  .service-grid{grid-template-columns:minmax(0,1fr)!important}
+  .service-card{width:100%!important;max-width:100%!important;min-width:0!important}
+  .timeline .step{width:100%!important;max-width:100%!important;min-width:0!important}
+
+  .marquee-wrap{width:100%!important;max-width:100%!important;overflow:hidden!important}
+  .marquee{max-width:none!important}
+
+  .footer{box-sizing:border-box!important}
+  .footer>*{min-width:0!important;max-width:100%!important}
+
+  .modal{width:100%!important;max-width:100%!important;overflow-x:clip!important}
+  .modal-card,.brief-modal{max-width:calc(100vw - 20px)!important}
+}
+
+@media (max-width: 560px){
+  .shell{margin-left:12px!important;margin-right:12px!important}
+  .brand{flex-basis:112px!important}.brand img{width:112px!important}
+  .nav-links{left:12px!important;right:12px!important;max-width:none!important}
+
+  .hero{padding-top:96px!important}
+  .hero-title{font-size:clamp(40px,12.2vw,54px)!important;line-height:.95!important;letter-spacing:-.05em!important}
+  .hero-sub{font-size:15px!important}
+  .hero-actions{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+  .hero-actions .pill-btn,.hero-actions .text-btn{width:100%!important;max-width:100%!important}
+
+  .hero-stage{height:286px!important}
+  .logo-plate{left:12px!important;right:12px!important;transform:translateY(-50%)!important;width:auto!important;max-width:none!important}
+  .orbit-a{width:330px!important;height:330px!important}.orbit-b{width:210px!important;height:210px!important}
+
+  .section{padding-top:64px!important;padding-bottom:64px!important}
+  .section-head h2{font-size:clamp(32px,9.7vw,43px)!important;line-height:1.02!important}
+  .section-head p{font-size:14px!important}
+
+  .project-copy{padding:22px 18px!important}
+  .project-copy h3{font-size:clamp(38px,11vw,50px)!important}
+  .project-copy p{font-size:14px!important}
+  .project-visual{min-height:330px!important}
+  .math-brand-card{left:12px!important;right:12px!important;max-width:none!important;width:auto!important}
+  .math-card{max-width:42%!important}
+  .phone-card{width:232px!important;max-width:calc(100% - 36px)!important}
+
+  .about-panel,.contact-box{padding-left:20px!important;padding-right:20px!important}
+  .about-panel h2,.contact-box h2{font-size:clamp(34px,10vw,46px)!important}
+
+  .footer{display:grid!important;grid-template-columns:minmax(0,1fr)!important;padding-left:0!important;padding-right:0!important}
+  .footer-mid{min-width:0!important}
+
+  .modal-card,.brief-modal{width:calc(100vw - 16px)!important;max-width:calc(100vw - 16px)!important;margin-left:auto!important;margin-right:auto!important}
+}
+
+@media (max-width: 380px){
+  .shell{margin-left:10px!important;margin-right:10px!important}
+  .brand{flex-basis:104px!important}.brand img{width:104px!important}
+  .hero-title{font-size:38px!important}
+  .project-copy{padding-left:16px!important;padding-right:16px!important}
+}
