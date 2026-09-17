@@ -1,0 +1,1 @@
+Wawej Studio assets only. No dependency on nova-demo.
