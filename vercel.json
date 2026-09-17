@@ -14,6 +14,12 @@
         { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
         { "key": "Cache-Control", "value": "no-cache" }
       ]
+    },
+    {
+      "source": "/assets/wawej-logo-dark.webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
     }
   ]
 }
