@@ -1,40 +1,62 @@
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+(()=>{
+  const modal=document.getElementById('contactModal');
+  if(!modal)return;
+  const card=modal.querySelector('.modal-card');
+  if(!card)return;
+  card.className='modal-card brief-modal';
+  card.innerHTML=`
+    <button class="modal-close" type="button" data-close-contact aria-label="Close">×</button>
+    <aside class="brief-intro">
+      <div class="brief-code">WAWEJ / PROJECT REQUEST</div>
+      <div class="brief-orb" aria-hidden="true"></div>
+      <div class="kicker">PROJECT BRIEF</div>
+      <h2 id="modalTitle">Let’s build something worth remembering.</h2>
+      <p class="brief-lead">Send the essentials. We’ll receive the brief directly and reply with the clearest next step.</p>
+      <div class="brief-meta">
+        <div><span>01</span><b data-custom="m1">Short brief</b></div>
+        <div><span>02</span><b data-custom="m2">Direct to Wawej</b></div>
+        <div><span>03</span><b data-custom="m3">Fast reply</b></div>
+      </div>
+    </aside>
+    <form id="briefForm" class="brief-form">
+      <div class="brief-form-top"><span class="brief-signal"></span><span data-custom="private">Private project request</span></div>
+      <div class="brief-fields">
+        <label><span data-custom="name">Your name</span><input required maxlength="80" name="name" autocomplete="name" placeholder="Nodir" /></label>
+        <label><span data-custom="project">Project / company</span><input required maxlength="100" name="project" placeholder="Project name" /></label>
+        <label><span data-custom="contact">Telegram / contact</span><input maxlength="120" name="contact" placeholder="@username or email" /></label>
+        <label><span data-custom="type">What do you need?</span><select name="type"><option>Website</option><option>Product design</option><option>Development</option><option>AI automation</option><option>Brand + website</option></select></label>
+        <label class="brief-details"><span data-custom="details">A few details</span><textarea required maxlength="1800" name="details" rows="5" placeholder="What are you building?"></textarea></label>
+        <label class="brief-hp" aria-hidden="true"><span>Website</span><input name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <button class="brief-submit" id="briefSubmit" type="submit"><span class="brief-submit-label" data-custom="send">Send project brief</span><span class="brief-submit-icon">↗</span></button>
+      <p class="form-note" id="formNote" data-custom="note">Your request can be delivered straight to Wawej through Telegram.</p>
+    </form>`;
 
-const translations={
-  en:{
-    'nav.work':'Work','nav.services':'Services','nav.process':'Process','nav.about':'About','nav.cta':'Start a project',
-    'hero.eyebrow':'Independent digital studio · 2026','hero.line1':'We build digital','hero.line2':'products that move.','hero.sub':'Strategy, design, code and AI automation — shaped into fast, memorable products for ambitious ideas.','hero.work':'Explore our work','hero.talk':'Have a project? Let’s talk','hero.tag1':'Brand + Web','hero.tag2':'AI systems','hero.tag3':'Launch ready',
-    'work.kicker':'Selected work','work.title':'Products built under Wawej.','work.sub':'A studio is only as strong as what it ships. These are products designed, built or developed through Wawej Studio.','work.math':'A modern digital mathematics platform focused on a clean learning experience, speed and clarity.','work.post':'An AI-assisted commerce workflow that turns product information into ready-to-publish sales content and previews.','work.visit':'Visit project','work.private':'Private product','work.progress':'In development','work.progressLong':'Currently in development',
-    'services.kicker':'Capabilities','services.title':'From idea to launch.','services.sub':'One studio, one direction — so brand, interface and engineering feel like one product instead of separate parts.','services.s1t':'Brand & direction','services.s1p':'Visual identity, creative direction, systems and a digital look that feels distinct.','services.s2t':'Web & product design','services.s2p':'High-conversion websites and product interfaces built around clear user journeys.','services.s3t':'Development','services.s3p':'Responsive frontends, modern stacks, integrations and production-ready implementation.','services.s4t':'AI automation','services.s4p':'AI-powered flows that remove repetitive work and turn ideas into scalable systems.',
-    'process.kicker':'How we work','process.title':'Clear process. Sharp output.','process.sub':'A simple system designed to move quickly without sacrificing detail.','process.p1t':'Discover','process.p1p':'We define the problem, audience, outcome and what makes the product worth remembering.','process.p2t':'Design','process.p2p':'We shape the system, visual language and interactions before production.','process.p3t':'Build','process.p3p':'We turn the approved direction into a fast, responsive, maintainable product.','process.p4t':'Launch','process.p4p':'Final polish, QA, deployment and a clean handoff ready for real users.',
-    'about.kicker':'About Wawej','about.a':'Small studio.','about.b':'Big product energy.','about.p':'Wawej is an independent digital studio building modern websites, products and AI-powered experiences with a strong focus on detail, speed and identity.',
-    'contact.kicker':'Start something','contact.title':'Have an idea worth building?','contact.sub':'Tell us what you’re working on. We’ll turn the brief into a clear next step.','contact.cta':'Start a project',
-    'footer.label':'Independent digital product studio','footer.top':'Back to top','modal.kicker':'Project brief','modal.title':'Tell Wawej what you want to build.','modal.name':'Your name','modal.project':'Project / company','modal.type':'What do you need?','modal.details':'A few details','modal.copy':'Copy project brief','modal.note':'This demo copies the brief to your clipboard. Connect your Telegram, email or CRM before launch.'
-  },
-  uz:{
-    'nav.work':'Loyihalar','nav.services':'Xizmatlar','nav.process':'Jarayon','nav.about':'Biz haqimizda','nav.cta':'Loyiha boshlash',
-    'hero.eyebrow':'Mustaqil digital studio · 2026','hero.line1':'Biz zamonaviy digital','hero.line2':'mahsulotlar yaratamiz.','hero.sub':'Strategiya, dizayn, dasturlash va AI avtomatlashtirish — kuchli g‘oyalarni tez, esda qoladigan mahsulotga aylantiramiz.','hero.work':'Ishlarimizni ko‘rish','hero.talk':'Loyihangiz bormi? Gaplashamiz','hero.tag1':'Brend + Web','hero.tag2':'AI tizimlar','hero.tag3':'Launchga tayyor',
-    'work.kicker':'Tanlangan loyihalar','work.title':'Wawej ostida yaratilgan mahsulotlar.','work.sub':'Studiyaning kuchi — chiqarilgan mahsulotlarda. Quyidagilar Wawej Studio orqali dizayn qilingan, ishlab chiqilgan yoki qurilgan loyihalar.','work.math':'Toza o‘rganish tajribasi, tezlik va tushunarlilikka yo‘naltirilgan zamonaviy matematika platformasi.','work.post':'Mahsulot ma’lumotlarini tayyor savdo posti va previewga aylantiruvchi AI yordamidagi commerce workflow.','work.visit':'Loyihani ochish','work.private':'Yopiq loyiha','work.progress':'Ishlab chiqilmoqda','work.progressLong':'Hozir ishlab chiqilmoqda',
-    'services.kicker':'Imkoniyatlar','services.title':'G‘oyadan launchgacha.','services.sub':'Bitta studio, bitta yo‘nalish — brend, interfeys va kod alohida qismlar emas, bitta yaxlit mahsulotdek ishlaydi.','services.s1t':'Brend va yo‘nalish','services.s1p':'Vizual identika, kreativ yo‘nalish va ajralib turadigan digital uslub.','services.s2t':'Web va product dizayn','services.s2p':'Aniq user journey asosidagi zamonaviy saytlar va mahsulot interfeyslari.','services.s3t':'Dasturlash','services.s3p':'Responsive frontend, zamonaviy stack, integratsiyalar va productionga tayyor yechimlar.','services.s4t':'AI avtomatlashtirish','services.s4p':'Takroriy ishlarni qisqartirib, g‘oyani kengayadigan tizimga aylantiruvchi AI workflowlar.',
-    'process.kicker':'Qanday ishlaymiz','process.title':'Aniq jarayon. Kuchli natija.','process.sub':'Detallarni yo‘qotmasdan tez ishlash uchun qurilgan sodda tizim.','process.p1t':'Tahlil','process.p1p':'Muammo, auditoriya, maqsad va mahsulotni esda qoldiradigan asosiy farqni aniqlaymiz.','process.p2t':'Dizayn','process.p2p':'Ishlab chiqishdan oldin tizim, vizual til va interaksiyalarni shakllantiramiz.','process.p3t':'Yaratish','process.p3p':'Tasdiqlangan yo‘nalishni tez, responsive va boshqarish oson mahsulotga aylantiramiz.','process.p4t':'Launch','process.p4p':'Yakuniy polish, QA, deploy va real foydalanuvchilar uchun tayyor topshirish.',
-    'about.kicker':'Wawej haqida','about.a':'Kichik studio.','about.b':'Katta mahsulot energiyasi.','about.p':'Wawej — detal, tezlik va o‘ziga xoslikka urg‘u berib, zamonaviy saytlar, digital mahsulotlar va AI tajribalar yaratadigan mustaqil studio.',
-    'contact.kicker':'Boshlaymiz','contact.title':'Qurishga arziydigan g‘oyangiz bormi?','contact.sub':'Nima ustida ishlayotganingizni ayting. Briefni aniq keyingi qadamga aylantiramiz.','contact.cta':'Loyiha boshlash',
-    'footer.label':'Mustaqil digital product studio','footer.top':'Tepaga qaytish','modal.kicker':'Loyiha briefi','modal.title':'Wawejga nima yaratmoqchi ekaningizni ayting.','modal.name':'Ismingiz','modal.project':'Loyiha / kompaniya','modal.type':'Nima kerak?','modal.details':'Qisqacha ma’lumot','modal.copy':'Briefni nusxalash','modal.note':'Bu demo briefni clipboardga nusxalaydi. Launchdan oldin Telegram, email yoki CRM ulash kerak.'
-  }
-};
-let lang='en';
-function applyLang(){document.documentElement.lang=lang;$$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n; if(translations[lang][k])el.textContent=translations[lang][k]});$('#langBtn').textContent=lang==='en'?'UZ':'EN';}
-$('#langBtn').addEventListener('click',()=>{lang=lang==='en'?'uz':'en';applyLang()});
+  const form=card.querySelector('#briefForm');
+  const note=card.querySelector('#formNote');
+  const btn=card.querySelector('#briefSubmit');
+  const label=card.querySelector('.brief-submit-label');
 
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){const d=e.target.dataset.delay||0;setTimeout(()=>e.target.classList.add('visible'),d);io.unobserve(e.target)}}),{threshold:.13});$$('.reveal').forEach(el=>io.observe(el));
+  const copy={
+    en:{title:'Let’s build something worth remembering.',lead:'Send the essentials. We’ll receive the brief directly and reply with the clearest next step.',m1:'Short brief',m2:'Direct to Wawej',m3:'Fast reply',private:'Private project request',name:'Your name',project:'Project / company',contact:'Telegram / contact',type:'What do you need?',details:'A few details',send:'Send project brief',note:'Your request can be delivered straight to Wawej through Telegram.',ph:'What are you building?'},
+    uz:{title:'Esda qoladigan loyiha yaratamiz.',lead:'Asosiy ma’lumotlarni yuboring. Brief to‘g‘ridan-to‘g‘ri bizga keladi va keyingi qadam bilan javob beramiz.',m1:'Qisqa brief',m2:'Bevosita Wawejga',m3:'Tez javob',private:'Maxfiy loyiha so‘rovi',name:'Ismingiz',project:'Loyiha / kompaniya',contact:'Telegram / aloqa',type:'Nima kerak?',details:'Qisqacha ma’lumot',send:'Loyiha briefini yuborish',note:'So‘rov Wawej Telegramiga to‘g‘ridan-to‘g‘ri yuboriladi.',ph:'Loyihangiz haqida qisqacha yozing…'}
+  };
+  const currentLang=()=>document.getElementById('langBtn')?.textContent.trim()==='EN'?'uz':'en';
+  const sync=()=>{const c=copy[currentLang()];card.querySelector('#modalTitle').textContent=c.title;card.querySelector('.brief-lead').textContent=c.lead;card.querySelectorAll('[data-custom]').forEach(el=>{const k=el.dataset.custom;if(c[k])el.textContent=c[k]});card.querySelector('textarea').placeholder=c.ph;};
 
-const navWrap=$('.nav-wrap');window.addEventListener('scroll',()=>navWrap.classList.toggle('scrolled',scrollY>20),{passive:true});
-const menu=$('#menuBtn'),links=$('#navLinks');menu.addEventListener('click',()=>{const open=menu.classList.toggle('open');links.classList.toggle('open',open);menu.setAttribute('aria-expanded',String(open))});$$('#navLinks a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');links.classList.remove('open');menu.setAttribute('aria-expanded','false')}));
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();e.stopImmediatePropagation();
+    const f=new FormData(form),lang=currentLang();
+    const payload={name:String(f.get('name')||'').trim(),project:String(f.get('project')||'').trim(),contact:String(f.get('contact')||'').trim(),type:String(f.get('type')||'').trim(),details:String(f.get('details')||'').trim(),website:String(f.get('website')||'').trim()};
+    const original=label.textContent;note.classList.remove('success','error');btn.disabled=true;label.textContent=lang==='uz'?'Yuborilmoqda…':'Sending…';
+    try{
+      const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const data=await r.json().catch(()=>({}));
+      if(!r.ok)throw new Error(data.error||'send_failed');
+      note.textContent=lang==='uz'?'Yuborildi. Brief Wawej Telegramiga yetib bordi.':'Sent. Your brief reached Wawej on Telegram.';note.classList.add('success');form.reset();
+    }catch(err){note.textContent=err.message==='telegram_not_configured'?(lang==='uz'?'Telegram ulanishi Vercel’da hali sozlanmagan.':'Telegram is not configured in Vercel yet.'):(lang==='uz'?'Yuborishda xatolik bo‘ldi. Qayta urinib ko‘ring.':'Could not send the brief. Please try again.');note.classList.add('error');}
+    finally{btn.disabled=false;label.textContent=original;}
+  },true);
 
-const glow=$('.cursor-glow');window.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';glow.style.opacity='1'}},{passive:true});
-
-const modal=$('#contactModal');function openModal(){modal.classList.add('show');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>modal.querySelector('input')?.focus(),40)}function closeModal(){modal.classList.remove('show');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}$$('[data-open-contact]').forEach(b=>b.addEventListener('click',openModal));$$('[data-close-contact]').forEach(b=>b.addEventListener('click',closeModal));window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-$('#briefForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget);const brief=`WAWEJ PROJECT BRIEF\n\nName: ${f.get('name')}\nProject: ${f.get('project')}\nNeed: ${f.get('type')}\n\nDetails:\n${f.get('details')}`;try{await navigator.clipboard.writeText(brief);$('#formNote').textContent=lang==='uz'?'Brief nusxalandi. Endi uni Telegram yoki emailga yuborishingiz mumkin.':'Brief copied. You can now send it through Telegram or email.'}catch{$('#formNote').textContent=brief}}
-);
-applyLang();
+  const legacy=document.createElement('script');legacy.src='base-script.js?v=1';legacy.onload=()=>{sync();const lb=document.getElementById('langBtn');if(lb)lb.addEventListener('click',()=>setTimeout(sync,0));};document.body.appendChild(legacy);
+})();
