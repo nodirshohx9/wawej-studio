@@ -21,15 +21,15 @@
     <form id="briefForm" class="brief-form">
       <div class="brief-form-top"><span class="brief-signal"></span><span data-custom="private">Private project request</span></div>
       <div class="brief-fields">
-        <label><span data-custom="name">Your name</span><input required maxlength="80" name="name" autocomplete="name" placeholder="Nodir" /></label>
-        <label><span data-custom="project">Project / company</span><input required maxlength="100" name="project" placeholder="Project name" /></label>
+        <label><span data-custom="name">Your name</span><input required minlength="2" maxlength="80" name="name" autocomplete="name" placeholder="Nodir" /></label>
+        <label><span data-custom="project">Project / company</span><input required minlength="2" maxlength="100" name="project" placeholder="Project name" /></label>
         <label><span data-custom="contact">Telegram / contact</span><input maxlength="120" name="contact" placeholder="@username or email" /></label>
         <label><span data-custom="type">What do you need?</span><select name="type"><option>Website</option><option>Product design</option><option>Development</option><option>AI automation</option><option>Brand + website</option></select></label>
-        <label class="brief-details"><span data-custom="details">A few details</span><textarea required maxlength="1800" name="details" rows="5" placeholder="What are you building?"></textarea></label>
+        <label class="brief-details"><span data-custom="details">A few details</span><textarea required minlength="8" maxlength="1800" name="details" rows="5" placeholder="What are you building?"></textarea></label>
         <label class="brief-hp" aria-hidden="true"><span>Website</span><input name="website" tabindex="-1" autocomplete="off" /></label>
       </div>
       <button class="brief-submit" id="briefSubmit" type="submit"><span class="brief-submit-label" data-custom="send">Send project brief</span><span class="brief-submit-icon">↗</span></button>
-      <p class="form-note" id="formNote" data-custom="note">Your request can be delivered straight to Wawej through Telegram.</p>
+      <p class="form-note" id="formNote" data-custom="note" aria-live="polite">Your request can be delivered straight to Wawej through Telegram.</p>
     </form>`;
 
   const form=card.querySelector('#briefForm');
@@ -49,13 +49,38 @@
     const f=new FormData(form),lang=currentLang();
     const payload={name:String(f.get('name')||'').trim(),project:String(f.get('project')||'').trim(),contact:String(f.get('contact')||'').trim(),type:String(f.get('type')||'').trim(),details:String(f.get('details')||'').trim(),website:String(f.get('website')||'').trim()};
     const original=label.textContent;note.classList.remove('success','error');btn.disabled=true;label.textContent=lang==='uz'?'Yuborilmoqda…':'Sending…';
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),10000);
     try{
-      const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const r=await fetch('/api/contact',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        credentials:'same-origin',
+        body:JSON.stringify(payload),
+        signal:controller.signal
+      });
       const data=await r.json().catch(()=>({}));
       if(!r.ok)throw new Error(data.error||'send_failed');
-      note.textContent=lang==='uz'?'Yuborildi. Brief Wawej Telegramiga yetib bordi.':'Sent. Your brief reached Wawej on Telegram.';note.classList.add('success');form.reset();
-    }catch(err){note.textContent=err.message==='telegram_not_configured'?(lang==='uz'?'Telegram ulanishi Vercel’da hali sozlanmagan.':'Telegram is not configured in Vercel yet.'):(lang==='uz'?'Yuborishda xatolik bo‘ldi. Qayta urinib ko‘ring.':'Could not send the brief. Please try again.');note.classList.add('error');}
-    finally{btn.disabled=false;label.textContent=original;}
+      note.textContent=lang==='uz'?'Yuborildi. Brief Wawej Telegramiga yetib bordi.':'Sent. Your brief reached Wawej on Telegram.';
+      note.classList.add('success');
+      form.reset();
+    }catch(err){
+      const code=err?.name==='AbortError'?'timeout':err?.message;
+      const messages={
+        telegram_not_configured:{uz:'Telegram ulanishi Vercel’da hali sozlanmagan.',en:'Telegram is not configured in Vercel yet.'},
+        too_many_requests:{uz:'Juda ko‘p so‘rov yuborildi. Birozdan keyin qayta urinib ko‘ring.',en:'Too many requests. Please try again a little later.'},
+        invalid_fields:{uz:'Ma’lumotlarni to‘liqroq kiriting.',en:'Please provide a little more detail.'},
+        invalid_type:{uz:'Xizmat turi noto‘g‘ri. Qayta tanlang.',en:'Please select a valid service type.'},
+        forbidden:{uz:'Bu so‘rov xavfsizlik tekshiruvidan o‘tmadi.',en:'This request did not pass the security check.'},
+        timeout:{uz:'Server javobi kechikdi. Qayta urinib ko‘ring.',en:'The server took too long to respond. Please try again.'}
+      };
+      note.textContent=messages[code]?.[lang]||(lang==='uz'?'Yuborishda xatolik bo‘ldi. Qayta urinib ko‘ring.':'Could not send the brief. Please try again.');
+      note.classList.add('error');
+    }finally{
+      clearTimeout(timeout);
+      btn.disabled=false;
+      label.textContent=original;
+    }
   },true);
 
   const legacy=document.createElement('script');legacy.src='base-script.js?v=1';legacy.onload=()=>{sync();const lb=document.getElementById('langBtn');if(lb)lb.addEventListener('click',()=>setTimeout(sync,0));};document.body.appendChild(legacy);
